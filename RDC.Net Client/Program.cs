@@ -15,31 +15,31 @@ namespace RDC.Net_Client
         static void Main(string[] args)
         {
             //FullTest();
-            Client client = new Client();
+            for (int i = 11; i < 15; i++)
+            {
+                // 12 default
+                Client client = new Client(i, 512, UInt16.MaxValue, 100);
 
-            //client.TestFiles("Win2k8 R2 IIS(E).zip", "Win2k8 R2 x64 SQL2k8(D).zip");
+                Stopwatch sw = Stopwatch.StartNew();
+                //Dictionary<Client.Index, int> values = client.Scan(@"C:\Users\jklemma\Dropbox");
+                Dictionary<Client.Index, int> values = client.Scan(@"E:\Users\jklemma\Documents\Skyfire");
 
-            //client.TestFiles("pdf1.pdf", "pdf2.pdf");
-            //client.TestFiles("pdf1.pdf", "pdf3.pdf");
-            //client.TestFiles("pdf2.pdf", "pdf3.pdf");
+                Console.WriteLine();
+                Console.WriteLine("Stats: for byte length {0}", i);
+                Console.WriteLine("Time to process:     {0} ms", sw.ElapsedMilliseconds);
 
-            //Console.WriteLine("\n---------------------------------------------------");
-            //client.TestFiles("GitExtensions241SetupComplete.msi", "GitExtensions244SetupComplete.msi");
+                double totalSize = values.Sum(kvp => kvp.Key.Length * kvp.Value);
+                double storedSize = values.Sum(kvp => kvp.Key.Length);
 
-            ////Console.WriteLine("\n---------------------------------------------------");
-            ////client.TestFiles("GitExtensions241SetupComplete.msi.sigs", "GitExtensions244SetupComplete.msi.sigs");
-
-            ////Console.WriteLine("\n---------------------------------------------------");
-            ////client.TestFiles("GitExtensions241SetupComplete.msi.sigs.sigs", "GitExtensions244SetupComplete.msi.sigs.sigs");
-
-            //Console.WriteLine("\n---------------------------------------------------");
-            //client.TestFiles("GitExtensions243Setup.msi", "GitExtensions244Setup.msi");
-
-            //Console.WriteLine("\n---------------------------------------------------");
-            //client.TestFiles("GitExtensions241SetupComplete.msi", "GitExtensions244SetupComplete.msi");
-
-            //Console.WriteLine("\n---------------------------------------------------");
-            client.TestFiles("SQLEXPR_x86_ENU.exe", "SQLEXPR_x64_ENU.exe");
+                Console.WriteLine("Total Chunks:        {0}", values.Sum(kvp => kvp.Value));
+                Console.WriteLine("Max chunk ref count: {0}", values.Values.Max());
+                Console.WriteLine("Avg chunk ref count: {0}", values.Values.Average());
+                Console.WriteLine("Total file size:     {0} ", totalSize);
+                Console.WriteLine("Stored file size:    {0}", storedSize);
+                Console.WriteLine("% savings:           {0:P} ms", (totalSize - storedSize) / totalSize);
+                Console.WriteLine("=====================================================");
+                sw.Reset();
+            }
 
             Console.ReadLine();
         }
