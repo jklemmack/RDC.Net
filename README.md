@@ -19,7 +19,7 @@ Effectively, the algorithm works like this:
 
 The chunking algorithm used is as follows:
 * Use a rolling hash function to calculate the checksum of each position in the file.
-* For simplicity, MD5 is used, but may be changed so long as both the client and server.  
+* For simplicity, MD5 is used, but may be changed so long as both the client and server use the same algorithm.
 * Note this checksum is just a hash, not for security purposes, so cryptographic weaknesses are less important.
 * Each time the lower N (defined on both client & server) bits of a hash are all 0, mark that as the boundry of a chunk.
 * Don't chunk if the chunk size is below a specified threshold (avoids many small chunks).
